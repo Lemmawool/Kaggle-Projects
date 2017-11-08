@@ -65,6 +65,27 @@ fit <- randomForest(as.factor(Survived) ~ Pclass + Sex + Age + SibSp + Parch + F
                     importance=TRUE, 
                     ntree=2000)
 
+varImpPlot(fit)
+
+# Create a submission based off of the random forest
+Prediction <- predict(fit, test)
+submit <- data.frame(PassengerId = test$PassengerId, Survived = Prediction)
+write.csv(submit, file = "firstforest.csv", row.names = FALSE)
+
+# Use a different ensemble model
+install.packages('party')
+library(party)
+
+set.seed(415)
+fit <- cforest(as.factor(Survived) ~ Pclass + Sex + Age + SibSp + Parch + Fare +
+                 Embarked + Title + FamilySize + FamilyID,
+               data = train,
+               controls=cforest_unbiased(ntree=2000, mtry=3))
+Prediction <- predict(fit, test, OOB=TRUE, type = "response")
+submit <- data.frame(PassengerId = test$PassengerId, Survived = Prediction)
+write.csv(submit, file = "secondforest.csv", row.names = FALSE)
+
+
 
 
 
