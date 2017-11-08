@@ -1,5 +1,11 @@
-# Load rpart
+# Install and load the packages we ill need
+install.packages('rattle')
+install.packages('rpart.plot')
+install.packages('RColorBrewer')
 library(rpart)
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
 
 # Load data sets
 train <- read.csv("~/Kaggle Projects/R Tutorial/train.csv")
@@ -12,13 +18,6 @@ fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked,
 plot(fit)
 text(fit)
 
-# Install and load some new packages
-install.packages('rattle')
-install.packages('rpart.plot')
-install.packages('RColorBrewer')
-library(rattle)
-library(rpart.plot)
-library(RColorBrewer)
 
 # Plot fit data using the new libraries
 fancyRpartPlot(fit)
