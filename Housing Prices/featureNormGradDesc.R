@@ -50,7 +50,7 @@ theta <- gradientDescent(X_train_norm, y_train, theta, 0.005, 400)
 # Compute the SalePrice for the test data and create our submission.
 test_costs <- X_test_norm %*% theta
 test_costs <- abs(tail(test_costs, length(test_costs) - 1))*125
-test_ids <- test$Id #tail(test$V1, length(test$V1) - 1)
+test_ids <- test$Id
 submission <- data.frame(Id = test_ids, SalePrice = test_costs)
 write.csv(submission, file = "featureNormGradDesc.csv", quote = FALSE, row.names = FALSE)
 # Score of 0.46531
