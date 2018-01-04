@@ -34,3 +34,6 @@ submission <- data.frame(Id = test_ids, SalePrice = test_costs)
 write.csv(submission, file = "featureNormGradDesc.csv", quote = FALSE, row.names = FALSE)
 # Score of 0.71129
 
+
+
+

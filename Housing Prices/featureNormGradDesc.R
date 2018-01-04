@@ -6,14 +6,29 @@
 source("featureNormalize.R")
 source("gradientDescent.R")
 source("normalEquation.R")
-train <- read.csv("~/Kaggle Projects/Housing Prices/train.csv", header=FALSE)
-test <- read.csv("~/Kaggle Projects/Housing Prices/test.csv", header=FALSE)
+train <- read.csv("~/Kaggle Projects/Housing Prices/train.csv", header=TRUE)
+test <- read.csv("~/Kaggle Projects/Housing Prices/test.csv", header=TRUE)
+
+# Use fewer features.
+selectedFeatures_train <- data.frame(
+  "LotArea" = train$LotArea,
+  "OverallQual" = train$OverallQual,
+  "OverallCond" = train$OverallCond,
+  "SF" = train$GrLivArea
+)
+
+selectedFeatures_test <- data.frame(
+  "LotArea" = train$LotArea,
+  "OverallQual" = train$OverallQual,
+  "OverallCond" = train$OverallCond,
+  "SF" = train$GrLivArea
+)
 
 # Convert the rows and columns in train and test to numeric values.
-train_matrix <- sapply(train, as.numeric)
-train_matrix[is.na(train)] <- 0
-test_matrix <- sapply(test, as.numeric)
-test_matrix[is.na(test)] <- 0
+train_matrix <- sapply(selectedFeatures_train, as.numeric)
+train_matrix[is.na(selectedFeatures_train )] <- 0
+test_matrix <- sapply(selectedFeatures_test, as.numeric)
+test_matrix[is.na(selectedFeatures_test)] <- 0
 
 # Compute theta using a normalized set of features.
 num_features <- length(train_matrix[1,])
@@ -34,11 +49,11 @@ theta <- gradientDescent(X_train_norm, y_train, theta, 0.005, 400)
 
 # Compute the SalePrice for the test data and create our submission.
 test_costs <- X_test_norm %*% theta
-test_costs <- abs(tail(test_costs, length(test_costs) - 1))*1000
-test_ids <- tail(test$V1, length(test$V1) - 1)
-submission <- data.frame(Ids = test_ids, SalePrice = test_costs)
+test_costs <- abs(tail(test_costs, length(test_costs) - 1))*125
+test_ids <- test$Id #tail(test$V1, length(test$V1) - 1)
+submission <- data.frame(Id = test_ids, SalePrice = test_costs)
 write.csv(submission, file = "featureNormGradDesc.csv", quote = FALSE, row.names = FALSE)
-# Score of 0.64944
+# Score of 0.46531
 
 
 
